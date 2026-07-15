@@ -66,7 +66,7 @@ pre {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
+  gap: 2px;
   min-width: 0;
 }
 
@@ -78,9 +78,9 @@ pre {
 
 .site-brand-copy {
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 500;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.26em;
   line-height: 1;
   color: var(--accent-strong);
   text-transform: uppercase;
@@ -852,8 +852,8 @@ pre code {
   }
 
   .site-brand-copy {
-    font-size: 0.7rem;
-    letter-spacing: 0.24em;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
   }
 
   .site-brand-version {
