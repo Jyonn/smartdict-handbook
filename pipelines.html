@@ -3,23 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartDict Handbook · Pipelines</title>
-  <meta name="description" content="SmartDict pipelines: execution order, built-in stages, typed transformations, and pipeline errors.">
+  <title>smartdict · pipelines</title>
+  <meta name="description" content="smartdict pipelines: execution order, built-in stages, typed transformations, and pipeline errors.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
     rel="stylesheet"
   >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-light.min.css"
+  >
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body data-page="pipelines">
   <header class="site-header">
     <a class="site-brand" href="./index.html">
-      <span class="site-brand-mark">SD</span>
+      <img class="site-brand-logo" src="./assets/logo.svg" alt="smartdict">
       <span class="site-brand-copy">
-        <strong>SmartDict</strong>
-        <span>Handbook</span>
+        <strong>smartdict</strong>
+        <span>handbook</span>
       </span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
@@ -36,10 +40,10 @@
   <main class="page">
     <section class="page-hero">
       <p class="eyebrow">Feature Page</p>
-      <h1>Pipelines transform values after resolution</h1>
+      <h1>Pipelines</h1>
       <p class="page-hero-text">
         Pipeline syntax follows <code>${ref[:default][|stage]...}</code>.
-        SmartDict resolves the reference first, applies the default if missing,
+        smartdict resolves the reference first, applies the default if missing,
         then runs stages from left to right.
       </p>
     </section>
@@ -75,7 +79,7 @@
           <span>python</span>
           <button class="copy-button" data-copy-target="pipeline-case-1">Copy</button>
         </div>
-        <pre><code id="pipeline-case-1">smartdict.parse({
+        <pre><code id="pipeline-case-1" class="language-python">smartdict.parse({
     "dataset": "  My Dataset  ",
     "save_dir": "${dataset|strip|lower|slug}",
 })
@@ -92,7 +96,7 @@
         <article class="card">
           <h3>Fallback path</h3>
           <div class="code-block compact">
-            <pre><code>smartdict.parse({
+            <pre><code class="language-python">smartdict.parse({
     "port": "${env.PORT:8000|int}",
 })
 # {'port': 8000}</code></pre>
@@ -101,7 +105,7 @@
         <article class="card">
           <h3>Existing value path</h3>
           <div class="code-block compact">
-            <pre><code>smartdict.parse({
+            <pre><code class="language-python">smartdict.parse({
     "env": {"PORT": "9000"},
     "port": "${env.PORT:8000|int}",
 })
@@ -117,7 +121,7 @@
         <h2>JSON stage</h2>
       </div>
       <div class="code-block compact">
-        <pre><code>smartdict.parse({
+        <pre><code class="language-python">smartdict.parse({
     "raw": '{"hello": "world"}',
     "value": "${raw|json}",
 })
@@ -131,7 +135,7 @@
         <h2>Pipelines can follow nested defaults</h2>
       </div>
       <div class="code-block compact">
-        <pre><code>smartdict.parse({
+        <pre><code class="language-python">smartdict.parse({
     "repr_source_model": "TEXT-EMBEDDING-3-SMALL",
     "embedding_model": "${sid_embedding_model:${repr_source_model:null}|lower}",
 })
@@ -172,7 +176,7 @@
         <h2>Pipeline stage errors are structured</h2>
       </div>
       <div class="code-block compact">
-        <pre><code>smartdict.parse({
+        <pre><code class="language-python">smartdict.parse({
     "port": "${env.PORT:abc|int}",
 })
 # raises PipelineStageError</code></pre>
@@ -186,9 +190,10 @@
   </main>
 
   <footer class="site-footer">
-    <p>Next: parsing strategies in <a href="./modes-errors.html">Modes & Errors</a>.</p>
+    <p>Next: parsing strategies in <a href="./modes-errors.html">modes &amp; errors</a>.</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script src="./script.js"></script>
 </body>
 </html>

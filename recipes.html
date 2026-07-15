@@ -3,23 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartDict Handbook · Recipes</title>
-  <meta name="description" content="Scenario-driven SmartDict recipes for experiment configs, runtime settings, metadata, and hybrid object/dict configs.">
+  <title>smartdict · recipes</title>
+  <meta name="description" content="Scenario-driven smartdict recipes for experiment configs, runtime settings, metadata, and hybrid object/dict configs.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
     rel="stylesheet"
   >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-light.min.css"
+  >
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body data-page="recipes">
   <header class="site-header">
     <a class="site-brand" href="./index.html">
-      <span class="site-brand-mark">SD</span>
+      <img class="site-brand-logo" src="./assets/logo.svg" alt="smartdict">
       <span class="site-brand-copy">
-        <strong>SmartDict</strong>
-        <span>Handbook</span>
+        <strong>smartdict</strong>
+        <span>handbook</span>
       </span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
@@ -36,9 +40,9 @@
   <main class="page">
     <section class="page-hero">
       <p class="eyebrow">Scenario Page</p>
-      <h1>Real-world SmartDict cases</h1>
+      <h1>Recipes</h1>
       <p class="page-hero-text">
-        These recipes show how SmartDict features combine in practice. Each case
+        These recipes show how smartdict features combine in practice. Each case
         is intentionally shaped like a real config someone would maintain.
       </p>
     </section>
@@ -53,7 +57,7 @@
           <span>python</span>
           <button class="copy-button" data-copy-target="recipe-ml">Copy</button>
         </div>
-        <pre><code id="recipe-ml">smartdict.parse({
+        <pre><code id="recipe-ml" class="language-python">smartdict.parse({
     "dataset": "spotify",
     "load": {
         "base_path": "~/data/${dataset}",
@@ -67,7 +71,7 @@
 })</code></pre>
       </div>
       <p class="section-lead">
-        This pattern is the bread-and-butter SmartDict use case: nested references
+        This pattern is the bread-and-butter smartdict use case: nested references
         remove repeated path construction and reduce config duplication.
       </p>
     </section>
@@ -78,7 +82,7 @@
         <h2>Embedding model fallback chain</h2>
       </div>
       <div class="code-block compact">
-        <pre><code>smartdict.parse({
+        <pre><code class="language-python">smartdict.parse({
     "repr_source_model": "text-embedding-3-small",
     "embedding_model": "${sid_embedding_model:${repr_source_model:null}}",
 })
@@ -96,7 +100,7 @@
         <h2>Typed runtime settings</h2>
       </div>
       <div class="code-block compact">
-        <pre><code>smartdict.parse({
+        <pre><code class="language-python">smartdict.parse({
     "debug": "${env.DEBUG:false|bool}",
     "port": "${env.PORT:8000|int}",
     "save_dir": '${dataset:"My Dataset"|strip|lower|slug}',
@@ -114,7 +118,7 @@
         <h2>JSON metadata fallback</h2>
       </div>
       <div class="code-block compact">
-        <pre><code>smartdict.parse({
+        <pre><code class="language-python">smartdict.parse({
     "metadata": '${config:{"hello": "world", "owner": "jyonn"}}',
 })</code></pre>
       </div>
@@ -130,7 +134,7 @@
         <h2>Object-backed profile switching</h2>
       </div>
       <div class="code-block compact">
-        <pre><code>class Config:
+        <pre><code class="language-python">class Config:
     def __init__(self):
         self.profile = "prod"
 
@@ -151,9 +155,10 @@ smartdict.parse({
   </main>
 
   <footer class="site-footer">
-    <p>Return to the <a href="./index.html">overview</a> or revisit <a href="./pipelines.html">Pipelines</a>.</p>
+    <p>Return to the <a href="./index.html">overview</a> or revisit <a href="./pipelines.html">pipelines</a>.</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script src="./script.js"></script>
 </body>
 </html>

@@ -3,23 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartDict Handbook · Modes and Errors</title>
-  <meta name="description" content="SmartDict parse modes, unresolved handling, iterative parsing, and structured error types.">
+  <title>smartdict · modes</title>
+  <meta name="description" content="smartdict parse modes, unresolved handling, iterative parsing, and structured error types.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
     rel="stylesheet"
   >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-light.min.css"
+  >
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body data-page="modes">
   <header class="site-header">
     <a class="site-brand" href="./index.html">
-      <span class="site-brand-mark">SD</span>
+      <img class="site-brand-logo" src="./assets/logo.svg" alt="smartdict">
       <span class="site-brand-copy">
-        <strong>SmartDict</strong>
-        <span>Handbook</span>
+        <strong>smartdict</strong>
+        <span>handbook</span>
       </span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
@@ -36,9 +40,9 @@
   <main class="page">
     <section class="page-hero">
       <p class="eyebrow">Feature Page</p>
-      <h1>Parse modes and structured errors</h1>
+      <h1>Modes &amp; errors</h1>
       <p class="page-hero-text">
-        SmartDict gives you three parsing strategies and several focused exception
+        smartdict gives you three parsing strategies and several focused exception
         types so configs can either fail fast or stay partially unresolved,
         depending on the phase of your workflow.
       </p>
@@ -55,7 +59,7 @@
           references remain at the end.
         </p>
         <div class="code-block compact">
-          <pre><code>smartdict.parse({
+          <pre><code class="language-python">smartdict.parse({
     "a": "${missing}",
 })
 # raises ReferenceNotFoundError</code></pre>
@@ -74,7 +78,7 @@
           <code>${missing}</code> instead of raising.
         </p>
         <div class="code-block compact">
-          <pre><code>smartdict.partial_parse({
+          <pre><code class="language-python">smartdict.partial_parse({
     "a": "${missing}",
     "b": "pre-${missing}-post",
     "c": "${missing}$",
@@ -99,7 +103,7 @@
           values that unlock later passes.
         </p>
         <div class="code-block compact">
-          <pre><code>smartdict.iterative_parse({
+          <pre><code class="language-python">smartdict.iterative_parse({
     "a": "${b}",
     "b": "${c}",
     "c": "ok",
@@ -160,7 +164,7 @@
         <article class="card">
           <h3>Nested missing reference</h3>
           <div class="code-block compact">
-            <pre><code>smartdict.parse({
+            <pre><code class="language-python">smartdict.parse({
     "app": {"profile": "prod"},
     "services": {"prod": {"url": "${config.endpoints.api}"}},
     "result": "${services.${app.profile}.url}",
@@ -171,7 +175,7 @@
         <article class="card">
           <h3>Cross-nested cycle</h3>
           <div class="code-block compact">
-            <pre><code>smartdict.parse({
+            <pre><code class="language-python">smartdict.parse({
     "app": {"profile": "${services.primary.profile}$"},
     "services": {"primary": {"profile": "${app.profile}$"}},
 })
@@ -183,9 +187,10 @@
   </main>
 
   <footer class="site-footer">
-    <p>Next: practical combinations in <a href="./recipes.html">Recipes</a>.</p>
+    <p>Next: practical combinations in <a href="./recipes.html">recipes</a>.</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script src="./script.js"></script>
 </body>
 </html>

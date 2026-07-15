@@ -8,6 +8,12 @@ if (activeNav) {
   activeNav.classList.add("is-active");
 }
 
+if (window.hljs) {
+  document.querySelectorAll("pre code").forEach((block) => {
+    window.hljs.highlightElement(block);
+  });
+}
+
 if (navToggle && siteNav) {
   navToggle.addEventListener("click", () => {
     const next = !siteNav.classList.contains("is-open");

@@ -62,16 +62,10 @@ pre {
   color: inherit;
 }
 
-.site-brand-mark {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-  color: white;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+.site-brand-logo {
+  width: 176px;
+  max-width: 42vw;
+  height: auto;
 }
 
 .site-brand-copy {
@@ -85,6 +79,7 @@ pre {
 
 .site-brand-copy span:last-child {
   color: var(--muted);
+  text-transform: lowercase;
 }
 
 .site-nav {
@@ -294,6 +289,47 @@ pre {
   padding: 20px 22px 24px;
   font-size: 0.92rem;
   line-height: 1.7;
+}
+
+pre code.hljs,
+pre code {
+  display: block;
+  padding: 0;
+  background: transparent;
+}
+
+.hljs {
+  color: #173234;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #7b736c;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal {
+  color: #0d6677;
+}
+
+.hljs-string,
+.hljs-doctag,
+.hljs-regexp {
+  color: #8a4a1b;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-name,
+.hljs-attribute {
+  color: #0a4c47;
+}
+
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet {
+  color: #9b4b00;
 }
 
 .section {

@@ -3,23 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartDict Handbook · References</title>
-  <meta name="description" content="Reference syntax for SmartDict: interpolation, native values, nested references, key generation, and object access.">
+  <title>smartdict · references</title>
+  <meta name="description" content="Reference syntax for smartdict: interpolation, native values, nested references, key generation, and object access.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
     rel="stylesheet"
   >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-light.min.css"
+  >
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body data-page="references">
   <header class="site-header">
     <a class="site-brand" href="./index.html">
-      <span class="site-brand-mark">SD</span>
+      <img class="site-brand-logo" src="./assets/logo.svg" alt="smartdict">
       <span class="site-brand-copy">
-        <strong>SmartDict</strong>
-        <span>Handbook</span>
+        <strong>smartdict</strong>
+        <span>handbook</span>
       </span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
@@ -36,9 +40,9 @@
   <main class="page">
     <section class="page-hero">
       <p class="eyebrow">Feature Page</p>
-      <h1>Reference syntax and lookup rules</h1>
+      <h1>References</h1>
       <p class="page-hero-text">
-        SmartDict's core behavior is reference resolution. This page explains how
+        smartdict's core behavior is reference resolution. This page explains how
         string interpolation, native-value preservation, nested references, key
         generation, and object-backed lookups behave in practice.
       </p>
@@ -54,14 +58,14 @@
           <span>python</span>
           <button class="copy-button" data-copy-target="ref-case-1">Copy</button>
         </div>
-        <pre><code id="ref-case-1">smartdict.parse({
+        <pre><code id="ref-case-1" class="language-python">smartdict.parse({
     "name": "smartdict",
     "message": "hello-${name}",
 })
 # {'name': 'smartdict', 'message': 'hello-smartdict'}</code></pre>
       </div>
       <p class="section-lead">
-        When a reference appears inside a larger string, SmartDict always returns
+        When a reference appears inside a larger string, smartdict always returns
         a string.
       </p>
     </section>
@@ -75,7 +79,7 @@
         <article class="card">
           <h3>Default syntax</h3>
           <div class="code-block compact">
-            <pre><code>smartdict.parse({
+            <pre><code class="language-python">smartdict.parse({
     "config": {"debug": True},
     "selected": "${config}",
 })
@@ -85,7 +89,7 @@
         <article class="card">
           <h3>Explicit full-match form</h3>
           <div class="code-block compact">
-            <pre><code>smartdict.parse({
+            <pre><code class="language-python">smartdict.parse({
     "config": {"debug": True},
     "selected": "${config}$",
 })
@@ -110,7 +114,7 @@
           <span>python</span>
           <button class="copy-button" data-copy-target="ref-case-3">Copy</button>
         </div>
-        <pre><code id="ref-case-3">smartdict.parse({
+        <pre><code id="ref-case-3" class="language-python">smartdict.parse({
     "env": "prod",
     "keys": {"prod": "url"},
     "url": "https://example.com",
@@ -119,7 +123,7 @@
 # {'env': 'prod', 'keys': {'prod': 'url'}, 'url': 'https://example.com', 'result': 'https://example.com'}</code></pre>
       </div>
       <p class="section-lead">
-        SmartDict can first resolve the inner expression, then use the result as
+        smartdict can first resolve the inner expression, then use the result as
         the path for the outer expression.
       </p>
     </section>
@@ -130,14 +134,14 @@
         <h2>Keys can be generated too</h2>
       </div>
       <div class="code-block compact">
-        <pre><code>smartdict.parse({
+            <pre><code class="language-python">smartdict.parse({
     "name": "k",
     "${name}": 1,
 })
 # {'name': 'k', 'k': 1}</code></pre>
       </div>
       <p class="section-lead">
-        SmartDict resolves references in both dictionary keys and dictionary values.
+        smartdict resolves references in both dictionary keys and dictionary values.
       </p>
     </section>
 
@@ -166,7 +170,7 @@
         <article class="card">
           <h3>Attribute access</h3>
           <div class="code-block compact">
-            <pre><code>class A:
+            <pre><code class="language-python">class A:
     def __init__(self):
         self.x = "value"
 
@@ -180,7 +184,7 @@ smartdict.parse({
         <article class="card">
           <h3>Mixed paths</h3>
           <div class="code-block compact">
-            <pre><code>class Config:
+            <pre><code class="language-python">class Config:
     def __init__(self):
         self.profile = "prod"
 
@@ -195,16 +199,17 @@ smartdict.parse({
       </div>
       <div class="callout">
         <strong>Lookup order:</strong>
-        for each path component SmartDict tries <code>obj[key]</code>, then
+        for each path component smartdict tries <code>obj[key]</code>, then
         <code>getattr(obj, key)</code>, then <code>obj[int(key)]</code>.
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>Next: typed fallback values in <a href="./defaults-json.html">Defaults & JSON</a>.</p>
+    <p>Next: typed fallback values in <a href="./defaults-json.html">defaults & JSON</a>.</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script src="./script.js"></script>
 </body>
 </html>
