@@ -61,6 +61,7 @@
       ready: l("已同步代码，编辑框失焦后会自动刷新右侧结果。", "已同步程式碼，編輯框失焦後會自動刷新右側結果。", "Code is synced. The result updates automatically when the editor loses focus.", "Le code est synchronisé. Le résultat se met à jour automatiquement lorsque l'éditeur perd le focus.", "コードは同期済みです。エディタからフォーカスが外れると右側結果が自動更新されます。", "코드가 동기화되었습니다. 편집기에서 포커스가 빠지면 오른쪽 결과가 자동 갱신됩니다.", "El código está sincronizado. El resultado se actualiza automáticamente cuando el editor pierde el foco."),
       compiled: l("已运行", "已執行", "Compiled", "Compilé", "実行済み", "실행됨", "Compilado"),
       copied: l("已复制", "已複製", "Copied", "Copié", "コピー済み", "복사됨", "Copiado"),
+      copyFailed: l("复制失败", "複製失敗", "Copy failed", "Copie impossible", "コピー失敗", "복사 실패", "La copia falló"),
       compileError: l("运行失败", "執行失敗", "Run failed", "Échec de l'exécution", "実行失敗", "실행 실패", "La ejecución falló"),
       install: l("安装", "安裝", "Install", "Installation", "インストール", "설치", "Instalación"),
       note: l("说明", "說明", "Note", "Note", "補足", "참고", "Nota"),

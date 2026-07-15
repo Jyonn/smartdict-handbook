@@ -113,6 +113,50 @@ function formatError(error) {
   return JSON.stringify(payload, null, 2);
 }
 
+function getIcon(name) {
+  if (name === "copy") {
+    return `
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9Z"></path>
+      </svg>
+    `;
+  }
+
+  if (name === "reset") {
+    return `
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7Z"></path>
+      </svg>
+    `;
+  }
+
+  return "";
+}
+
+async function copyText(text) {
+  if (navigator.clipboard?.writeText && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.top = "-1000px";
+  textarea.style.opacity = "0";
+  document.body.append(textarea);
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+
+  const ok = document.execCommand("copy");
+  textarea.remove();
+
+  if (!ok) {
+    throw new Error("Copy failed");
+  }
+}
+
 function evaluateSource(source) {
   try {
     return Function(`"use strict"; return (${source}\n);`)();
@@ -226,24 +270,26 @@ function renderCase(caseDef, locale, index) {
             <span>${escapeHtml(t(handbook.ui.iterations, locale))}</span>
             <input class="case-iterations" type="number" min="1" value="${iterations}">
           </label>
-          <button class="button button-flat case-reset" type="button">${escapeHtml(t(handbook.ui.reset, locale))}</button>
         </div>
       </div>
-      <div class="case-lab-body">
-        <section class="case-pane">
+      <div class="case-workbench">
+        <section class="case-side case-side-input">
           <div class="case-pane-head">
-            <span>${escapeHtml(t(handbook.ui.input, locale))}.js</span>
-            <button class="copy-button" data-copy-role="source">${escapeHtml(t(handbook.ui.copy, locale))}</button>
+            <span>${escapeHtml(t(handbook.ui.input, locale))}</span>
+            <div class="case-pane-actions">
+              <button class="copy-button icon-button case-reset" type="button" aria-label="${escapeHtml(t(handbook.ui.reset, locale))}" title="${escapeHtml(t(handbook.ui.reset, locale))}">${getIcon("reset")}</button>
+              <button class="copy-button icon-button" data-copy-role="source" aria-label="${escapeHtml(t(handbook.ui.copy, locale))}" title="${escapeHtml(t(handbook.ui.copy, locale))}">${getIcon("copy")}</button>
+            </div>
           </div>
           <div class="editor-shell">
             <pre class="editor-highlight"><code class="language-javascript"></code></pre>
             <textarea class="editor-input" spellcheck="false" wrap="off">${escapeHtml(caseDef.source)}</textarea>
           </div>
         </section>
-        <section class="case-pane">
+        <div class="case-divider" aria-hidden="true"></div>
+        <section class="case-side case-side-output">
           <div class="case-pane-head">
-            <span>${escapeHtml(t(handbook.ui.result, locale))}.json</span>
-            <button class="copy-button" data-copy-role="output">${escapeHtml(t(handbook.ui.copy, locale))}</button>
+            <span>${escapeHtml(t(handbook.ui.result, locale))}</span>
           </div>
           <pre class="case-output"><code class="language-json"></code></pre>
         </section>
@@ -409,19 +455,13 @@ function initCaseLab(card, locale) {
 
   card.querySelectorAll("[data-copy-role]").forEach((button) => {
     button.addEventListener("click", async () => {
-      const target = button.dataset.copyRole === "source" ? editor.value : outputCode.textContent;
-      const original = button.textContent;
-
       try {
-        await navigator.clipboard.writeText(target);
-        button.textContent = t(handbook.ui.copied, locale);
+        const target = button.dataset.copyRole === "source" ? editor.value : outputCode.textContent;
+        await copyText(target);
+        setStatus(t(handbook.ui.copied, locale), "success");
       } catch {
-        button.textContent = t(handbook.ui.compileError, locale);
+        setStatus(t(handbook.ui.copyFailed, locale), "error");
       }
-
-      window.setTimeout(() => {
-        button.textContent = original;
-      }, 1200);
     });
   });
 
@@ -463,17 +503,12 @@ function bindStaticCopyButtons(locale) {
 
     button.dataset.bound = "yes";
     button.addEventListener("click", async () => {
-      const original = button.textContent;
       try {
-        await navigator.clipboard.writeText(button.dataset.copyText || "");
-        button.textContent = t(handbook.ui.copied, locale);
+        await copyText(button.dataset.copyText || "");
+        button.setAttribute("title", t(handbook.ui.copied, locale));
       } catch {
-        button.textContent = t(handbook.ui.compileError, locale);
+        button.setAttribute("title", t(handbook.ui.copyFailed, locale));
       }
-
-      window.setTimeout(() => {
-        button.textContent = original;
-      }, 1200);
     });
   });
 }

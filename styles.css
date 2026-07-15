@@ -339,6 +339,21 @@ h1 {
   outline: none;
 }
 
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+}
+
+.icon-button svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
 pre {
   margin: 0;
   overflow: auto;
@@ -512,11 +527,6 @@ pre code {
   white-space: pre-wrap;
 }
 
-.page-hero-wrap {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 .install-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -594,18 +604,28 @@ pre code {
   display: none;
 }
 
-.case-lab-body {
+.case-workbench {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
   margin-top: 18px;
-}
-
-.case-pane {
   border: 1px solid var(--border);
   border-radius: 22px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.5);
+}
+
+.case-side {
+  min-width: 0;
+}
+
+.case-divider {
+  background: var(--border);
+}
+
+.case-pane-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .case-pane-head {
@@ -623,7 +643,7 @@ pre code {
 .editor-shell {
   position: relative;
   min-height: 284px;
-  overflow: auto;
+  overflow: hidden;
   background:
     linear-gradient(180deg, rgba(15, 118, 110, 0.05), transparent 28%),
     rgba(255, 255, 255, 0.18);
@@ -645,6 +665,7 @@ pre code {
 }
 
 .editor-highlight,
+.editor-input,
 .case-output {
   overflow: auto;
 }
@@ -657,12 +678,15 @@ pre code {
 
 .editor-highlight {
   pointer-events: none;
+  width: max-content;
+  min-width: 100%;
 }
 
 .editor-input {
   position: absolute;
   inset: 0;
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   border: 0;
   resize: none;
   background: transparent;
@@ -701,15 +725,6 @@ pre code {
   color: #9a3412;
 }
 
-.button-flat {
-  min-height: 42px;
-  border-radius: 12px;
-  border: 1px solid var(--border-strong);
-  background: rgba(255, 255, 255, 0.82);
-  color: var(--accent-strong);
-  box-shadow: none;
-}
-
 @keyframes rise {
   from {
     opacity: 0;
@@ -740,8 +755,12 @@ pre code {
   .feature-grid,
   .install-grid,
   .scenario-grid,
-  .case-lab-body {
+  .case-workbench {
     grid-template-columns: 1fr;
+  }
+
+  .case-divider {
+    display: none;
   }
 }
 
