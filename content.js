@@ -535,13 +535,13 @@ return {
               },
               {
                 title: l("迭代模式", "迭代模式", "Iterative mode", "Mode itératif", "iterative モード", "iterative 모드", "Modo iterative"),
-                summary: l("多跳别名需要多轮解析时，可以重复跑多次。", "多跳別名需要多輪解析時，可以重複跑多次。", "When aliases unlock one another across passes, iterative mode resolves them over multiple rounds.", "Quand des alias se débloquent au fil des passes, le mode itératif les résout sur plusieurs tours.", "複数パスで解決が進む別名連鎖に向いています。", "여러 번의 패스가 필요한 별칭 체인에 적합합니다.", "Cuando los alias se desbloquean entre pasadas, el modo iterative los resuelve en varias rondas."),
+                summary: l("第一轮先生成 key，第二轮后续引用才会真正看到它。把 iterations 改成 1 和 2 对比一下最直观。", "第一輪先生成 key，第二輪後續引用才會真正看到它。把 iterations 改成 1 和 2 對比一下最直觀。", "The first pass creates the key, and only the second pass lets downstream references see it. Switching between iterations 1 and 2 makes the behavior obvious.", "Le premier passage crée la clé, et seul le second permet aux références aval de la voir. Passez de 1 à 2 itérations pour voir la différence.", "1回目で key が生成され、2回目で後続参照がそれを見られるようになります。iterations を 1 と 2 で比べると分かりやすいです。", "첫 번째 패스에서 key가 생성되고, 두 번째 패스에서야 뒤쪽 참조가 그것을 볼 수 있습니다. iterations를 1과 2로 바꿔 보면 가장 직관적입니다.", "La primera pasada crea la clave y solo la segunda permite que las referencias posteriores la vean. Cambiar entre iteraciones 1 y 2 lo hace muy evidente."),
                 mode: "iterative",
                 iterations: 2,
                 source: `{
-  a: "\${b}",
-  b: "\${c}",
-  c: "ok"
+  x: "y",
+  "\${x}": 123,
+  a: "\${y}"
 }`,
               },
               {
