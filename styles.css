@@ -62,9 +62,9 @@ pre {
 }
 
 .site-brand-logo {
-  width: 164px;
-  max-width: 38vw;
-  height: auto;
+  height: 48px;
+  width: auto;
+  max-width: 34vw;
 }
 
 .site-nav {
