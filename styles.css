@@ -604,6 +604,10 @@ pre code {
   display: none;
 }
 
+.is-hidden {
+  display: none !important;
+}
+
 .case-workbench {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
@@ -626,6 +630,23 @@ pre code {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.case-pane-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.case-source-language {
+  min-height: 32px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--accent-strong);
+  font: inherit;
+  padding: 0 10px;
 }
 
 .case-pane-head {
@@ -651,6 +672,7 @@ pre code {
 
 .editor-highlight,
 .editor-input,
+.editor-static,
 .case-output {
   margin: 0;
   min-height: 284px;
@@ -666,11 +688,13 @@ pre code {
 
 .editor-highlight,
 .editor-input,
+.editor-static,
 .case-output {
   overflow: auto;
 }
 
 .editor-highlight code,
+.editor-static code,
 .case-output code {
   min-width: max-content;
   white-space: pre;
@@ -699,11 +723,29 @@ pre code {
   overflow-wrap: normal;
 }
 
+.editor-static {
+  display: none;
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  color: var(--text);
+}
+
+.editor-shell.is-readonly .editor-highlight,
+.editor-shell.is-readonly .editor-input {
+  display: none;
+}
+
+.editor-shell.is-readonly .editor-static {
+  display: block;
+}
+
 .editor-input::selection {
   background: rgba(15, 118, 110, 0.22);
 }
 
 .editor-input:focus-visible,
+.case-source-language:focus-visible,
 .site-locale select:focus-visible,
 .case-control select:focus-visible,
 .case-control input:focus-visible {

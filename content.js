@@ -52,6 +52,7 @@
       reset: l("重置", "重設", "Reset", "Réinitialiser", "リセット", "재설정", "Restablecer"),
       copy: l("复制", "複製", "Copy", "Copier", "コピー", "복사", "Copiar"),
       input: l("输入", "輸入", "Input", "Entrée", "入力", "입력", "Entrada"),
+      codeLanguage: l("代码语言", "程式語言", "Code language", "Langage du code", "コード言語", "코드 언어", "Idioma del código"),
       result: l("结果", "結果", "Result", "Résultat", "結果", "결과", "Resultado"),
       parseMode: l("解析模式", "解析模式", "Parse mode", "Mode de lecture", "解析モード", "파싱 모드", "Modo de análisis"),
       iterations: l("迭代次数", "迭代次數", "Iterations", "Itérations", "反復回数", "반복 횟수", "Iteraciones"),
@@ -326,6 +327,23 @@ return {
   attr_value: "\${a.x}",
   mixed_value: "\${services.\${app.profile}.url}"
 };`,
+                pythonSource: `class A:
+  def __init__(self):
+    self.x = "value"
+
+
+class Config:
+  def __init__(self):
+    self.profile = "prod"
+
+
+{
+  "a": A(),
+  "app": Config(),
+  "services": {"prod": {"url": "https://example.com"}},
+  "attr_value": "\${a.x}",
+  "mixed_value": "\${services.\${app.profile}.url}",
+}`,
               },
             ],
           },
@@ -673,6 +691,19 @@ return {
   },
   selected_url: "\${services.\${app.profile}.url}"
 };`,
+                pythonSource: `class Config:
+  def __init__(self):
+    self.profile = "prod"
+
+
+{
+  "app": Config(),
+  "services": {
+    "prod": {"url": "https://example.com"},
+    "dev": {"url": "http://localhost:8000"},
+  },
+  "selected_url": "\${services.\${app.profile}.url}",
+}`,
               },
             ],
           },

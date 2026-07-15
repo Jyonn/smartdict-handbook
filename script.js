@@ -248,6 +248,7 @@ function renderInstallSection(section, locale) {
 function renderCase(caseDef, locale, index) {
   const mode = caseDef.mode || "strict";
   const iterations = caseDef.iterations || 2;
+  const hasPythonSource = Boolean(caseDef.pythonSource);
 
   return `
     <article class="case-lab" data-mode="${mode}" data-iterations="${iterations}">
@@ -275,7 +276,15 @@ function renderCase(caseDef, locale, index) {
       <div class="case-workbench">
         <section class="case-side case-side-input">
           <div class="case-pane-head">
-            <span>${escapeHtml(t(handbook.ui.input, locale))}</span>
+            <div class="case-pane-title">
+              <span>${escapeHtml(t(handbook.ui.input, locale))}</span>
+              ${hasPythonSource ? `
+                <select class="case-source-language" aria-label="${escapeHtml(t(handbook.ui.codeLanguage, locale))}">
+                  <option value="javascript">JavaScript</option>
+                  <option value="python">Python</option>
+                </select>
+              ` : ""}
+            </div>
             <div class="case-pane-actions">
               <button class="copy-button icon-button case-reset" type="button" aria-label="${escapeHtml(t(handbook.ui.reset, locale))}" title="${escapeHtml(t(handbook.ui.reset, locale))}">${getIcon("reset")}</button>
               <button class="copy-button icon-button" data-copy-role="source" aria-label="${escapeHtml(t(handbook.ui.copy, locale))}" title="${escapeHtml(t(handbook.ui.copy, locale))}">${getIcon("copy")}</button>
@@ -284,6 +293,7 @@ function renderCase(caseDef, locale, index) {
           <div class="editor-shell">
             <pre class="editor-highlight"><code class="language-javascript"></code></pre>
             <textarea class="editor-input" spellcheck="false" wrap="off">${escapeHtml(caseDef.source)}</textarea>
+            ${hasPythonSource ? `<pre class="editor-static"><code class="language-python">${escapeHtml(caseDef.pythonSource)}</code></pre>` : ""}
           </div>
         </section>
         <div class="case-divider" aria-hidden="true"></div>
@@ -396,9 +406,12 @@ function syncNavigation(locale) {
 
 function initCaseLab(card, locale) {
   const editor = card.querySelector(".editor-input");
+  const editorShell = card.querySelector(".editor-shell");
   const highlightCode = card.querySelector(".editor-highlight code");
+  const staticCode = card.querySelector(".editor-static code");
   const outputCode = card.querySelector(".case-output code");
   const resetButton = card.querySelector(".case-reset");
+  const sourceLanguageSelect = card.querySelector(".case-source-language");
   const modeSelect = card.querySelector(".case-mode");
   const iterationsWrap = card.querySelector(".case-iterations-wrap");
   const iterationsInput = card.querySelector(".case-iterations");
@@ -414,12 +427,25 @@ function initCaseLab(card, locale) {
   function syncHighlight() {
     highlightCode.textContent = editor.value;
     highlightBlock(highlightCode);
+    if (staticCode) {
+      highlightBlock(staticCode);
+    }
   }
 
   function syncScroll() {
     const pre = card.querySelector(".editor-highlight");
     pre.scrollTop = editor.scrollTop;
     pre.scrollLeft = editor.scrollLeft;
+  }
+
+  function syncSourceLanguage() {
+    if (!sourceLanguageSelect) {
+      return;
+    }
+
+    const readonly = sourceLanguageSelect.value === "python";
+    editorShell.classList.toggle("is-readonly", readonly);
+    resetButton.classList.toggle("is-hidden", readonly);
   }
 
   function setStatus(text, state = "ready") {
@@ -459,7 +485,9 @@ function initCaseLab(card, locale) {
   card.querySelectorAll("[data-copy-role]").forEach((button) => {
     button.addEventListener("click", async () => {
       try {
-        const target = button.dataset.copyRole === "source" ? editor.value : outputCode.textContent;
+        const target = button.dataset.copyRole === "source"
+          ? (sourceLanguageSelect?.value === "python" ? staticCode?.textContent || "" : editor.value)
+          : outputCode.textContent;
         await copyText(target);
         setStatus(t(handbook.ui.copied, locale), "success");
       } catch {
@@ -479,6 +507,9 @@ function initCaseLab(card, locale) {
 
   modeSelect.addEventListener("change", run);
   iterationsInput.addEventListener("change", run);
+  sourceLanguageSelect?.addEventListener("change", () => {
+    syncSourceLanguage();
+  });
   editor.addEventListener("input", () => {
     syncHighlight();
     syncScroll();
@@ -494,6 +525,7 @@ function initCaseLab(card, locale) {
 
   syncIterationsVisibility();
   syncHighlight();
+  syncSourceLanguage();
   syncScroll();
   run();
 }
