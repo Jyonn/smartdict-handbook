@@ -4,7 +4,6 @@ const siteNav = document.getElementById("site-nav");
 const navToggle = document.querySelector(".nav-toggle");
 const mainRoot = document.querySelector("main.page");
 const footerRoot = document.querySelector("footer.site-footer");
-const brandLabel = document.querySelector(".site-brand-copy span:last-child");
 
 const DEFAULT_LOCALE = "en";
 const LOCALE_STORAGE_KEY = "smartdict-handbook-locale";
@@ -136,8 +135,7 @@ function renderHero(hero, locale) {
     `
     : "";
 
-  const containerClass = pageId === "home" ? "hero" : "page-hero-wrap";
-  const content = `
+  return `
     <section class="${pageId === "home" ? "hero" : "page-hero"}">
       <div class="${pageId === "home" ? "hero-copy" : "page-hero-copy"}">
         <p class="eyebrow">${escapeHtml(t(hero.eyebrow, locale))}</p>
@@ -148,8 +146,6 @@ function renderHero(hero, locale) {
       ${aside}
     </section>
   `;
-
-  return `<div class="${containerClass}">${content}</div>`;
 }
 
 function renderCardsSection(section, locale) {
@@ -176,19 +172,27 @@ function renderCardsSection(section, locale) {
 }
 
 function renderInstallSection(section, locale) {
+  const blocks = (section.blocks || [{
+    codeLabel: section.codeLabel,
+    code: section.code,
+  }]).map((block) => `
+    <div class="code-block">
+      <div class="code-block-head">
+        <span>${escapeHtml(block.codeLabel)}</span>
+        <button class="copy-button" data-copy-text="${escapeHtml(block.code)}">${escapeHtml(t(handbook.ui.copy, locale))}</button>
+      </div>
+      <pre><code class="language-bash">${escapeHtml(block.code)}</code></pre>
+    </div>
+  `).join("");
+
   return `
     <section class="section">
       <div class="section-heading">
         <p class="section-kicker">${escapeHtml(t(section.kicker, locale))}</p>
         <h2>${escapeHtml(t(section.title, locale))}</h2>
+        ${section.body ? `<p class="section-lead">${escapeHtml(t(section.body, locale))}</p>` : ""}
       </div>
-      <div class="code-block">
-        <div class="code-block-head">
-          <span>${escapeHtml(section.codeLabel)}</span>
-          <button class="copy-button" data-copy-text="${escapeHtml(section.code)}">${escapeHtml(t(handbook.ui.copy, locale))}</button>
-        </div>
-        <pre><code class="language-bash">${escapeHtml(section.code)}</code></pre>
-      </div>
+      <div class="install-grid">${blocks}</div>
       <div class="callout">
         <strong>${escapeHtml(t(handbook.ui.note, locale))}:</strong>
         ${escapeHtml(t(section.note, locale))}
@@ -222,8 +226,7 @@ function renderCase(caseDef, locale, index) {
             <span>${escapeHtml(t(handbook.ui.iterations, locale))}</span>
             <input class="case-iterations" type="number" min="1" value="${iterations}">
           </label>
-          <button class="button button-primary case-run" type="button">${escapeHtml(t(handbook.ui.run, locale))}</button>
-          <button class="button button-secondary case-reset" type="button">${escapeHtml(t(handbook.ui.reset, locale))}</button>
+          <button class="button button-flat case-reset" type="button">${escapeHtml(t(handbook.ui.reset, locale))}</button>
         </div>
       </div>
       <div class="case-lab-body">
@@ -234,7 +237,7 @@ function renderCase(caseDef, locale, index) {
           </div>
           <div class="editor-shell">
             <pre class="editor-highlight"><code class="language-javascript"></code></pre>
-            <textarea class="editor-input" spellcheck="false">${escapeHtml(caseDef.source)}</textarea>
+            <textarea class="editor-input" spellcheck="false" wrap="off">${escapeHtml(caseDef.source)}</textarea>
           </div>
         </section>
         <section class="case-pane">
@@ -246,7 +249,7 @@ function renderCase(caseDef, locale, index) {
         </section>
       </div>
       <p class="case-status" data-state="ready">${escapeHtml(t(handbook.ui.ready, locale))}</p>
-      <p class="case-hint">${escapeHtml(t(handbook.ui.keyboardHint, locale))}</p>
+      <p class="case-hint">${escapeHtml(t(handbook.ui.autoRunHint, locale))}</p>
     </article>
   `;
 }
@@ -291,14 +294,19 @@ function ensureLocaleControl(locale) {
     controls.className = "site-controls";
     controls.innerHTML = `
       <label class="site-locale">
-        <span class="site-locale-label"></span>
+        <span class="sr-only site-locale-label"></span>
+        <span class="site-locale-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm6.93 9h-3.1a15.78 15.78 0 0 0-1.35-5A8.03 8.03 0 0 1 18.93 11ZM12 4.04c.84 1.05 1.88 3.17 2.37 6h-4.74c.49-2.83 1.53-4.95 2.37-6ZM9.52 6a15.78 15.78 0 0 0-1.35 5h-3.1A8.03 8.03 0 0 1 9.52 6ZM5.07 13h3.1a15.78 15.78 0 0 0 1.35 5A8.03 8.03 0 0 1 5.07 13ZM12 19.96c-.84-1.05-1.88-3.17-2.37-6h4.74c-.49 2.83-1.53 4.95-2.37 6Zm2.48-1.96a15.78 15.78 0 0 0 1.35-5h3.1A8.03 8.03 0 0 1 14.48 18Z"></path>
+          </svg>
+        </span>
         <select id="site-locale"></select>
       </label>
     `;
 
     const header = document.querySelector(".site-header");
     if (header) {
-      header.insertBefore(controls, siteNav);
+      header.append(controls);
     }
   }
 
@@ -335,16 +343,12 @@ function syncNavigation(locale) {
     navToggle.textContent = t(handbook.ui.menu, locale);
   }
 
-  if (brandLabel) {
-    brandLabel.textContent = t(handbook.ui.handbook, locale);
-  }
 }
 
 function initCaseLab(card, locale) {
   const editor = card.querySelector(".editor-input");
   const highlightCode = card.querySelector(".editor-highlight code");
   const outputCode = card.querySelector(".case-output code");
-  const runButton = card.querySelector(".case-run");
   const resetButton = card.querySelector(".case-reset");
   const modeSelect = card.querySelector(".case-mode");
   const iterationsWrap = card.querySelector(".case-iterations-wrap");
@@ -421,7 +425,6 @@ function initCaseLab(card, locale) {
     });
   });
 
-  runButton.addEventListener("click", run);
   resetButton.addEventListener("click", () => {
     editor.value = initialSource;
     modeSelect.value = initialMode;
@@ -438,6 +441,7 @@ function initCaseLab(card, locale) {
     syncScroll();
     setStatus(t(handbook.ui.ready, locale), "ready");
   });
+  editor.addEventListener("blur", run);
   editor.addEventListener("scroll", syncScroll);
   editor.addEventListener("keydown", (event) => {
     if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {

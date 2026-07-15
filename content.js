@@ -29,7 +29,6 @@
         recipes: l("场景", "場景", "Recipes", "Recettes", "レシピ", "레시피", "Recetas"),
         playground: l("Playground", "Playground", "Playground", "Playground", "Playground", "Playground", "Playground"),
       },
-      handbook: l("手册", "手冊", "handbook", "manuel", "handbook", "핸드북", "manual"),
       menu: l("菜单", "選單", "Menu", "Menu", "メニュー", "메뉴", "Menú"),
       language: l("语言", "語言", "Language", "Langue", "言語", "언어", "Idioma"),
       interactiveHint: l(
@@ -50,7 +49,6 @@
         "예제는 브라우저에서 smartdict-js로 실행되며 Python 버전과 같은 데이터 구조 의미를 유지합니다.",
         "Los ejemplos se ejecutan en el navegador con smartdict-js y conservan la misma semántica de estructuras de datos que la versión de Python."
       ),
-      run: l("运行", "執行", "Run", "Exécuter", "実行", "실행", "Ejecutar"),
       reset: l("重置", "重設", "Reset", "Réinitialiser", "リセット", "재설정", "Restablecer"),
       copy: l("复制", "複製", "Copy", "Copier", "コピー", "복사", "Copiar"),
       input: l("输入", "輸入", "Input", "Entrée", "入力", "입력", "Entrada"),
@@ -60,7 +58,7 @@
       strict: l("严格", "嚴格", "strict", "strict", "strict", "strict", "strict"),
       partial: l("部分", "部分", "partial", "partiel", "partial", "partial", "partial"),
       iterative: l("迭代", "迭代", "iterative", "itératif", "iterative", "iterative", "iterative"),
-      ready: l("已同步代码，点击运行刷新右侧结果。", "已同步程式碼，點擊執行刷新右側結果。", "Code is synced. Click run to refresh the result.", "Le code est synchronisé. Cliquez sur exécuter pour actualiser le résultat.", "コードは同期済みです。実行すると右側の結果を更新します。", "코드가 동기화되었습니다. 실행을 눌러 오른쪽 결과를 갱신하세요.", "El código está sincronizado. Haz clic en ejecutar para actualizar el resultado."),
+      ready: l("已同步代码，编辑框失焦后会自动刷新右侧结果。", "已同步程式碼，編輯框失焦後會自動刷新右側結果。", "Code is synced. The result updates automatically when the editor loses focus.", "Le code est synchronisé. Le résultat se met à jour automatiquement lorsque l'éditeur perd le focus.", "コードは同期済みです。エディタからフォーカスが外れると右側結果が自動更新されます。", "코드가 동기화되었습니다. 편집기에서 포커스가 빠지면 오른쪽 결과가 자동 갱신됩니다.", "El código está sincronizado. El resultado se actualiza automáticamente cuando el editor pierde el foco."),
       compiled: l("已运行", "已執行", "Compiled", "Compilé", "実行済み", "실행됨", "Compilado"),
       copied: l("已复制", "已複製", "Copied", "Copié", "コピー済み", "복사됨", "Copiado"),
       compileError: l("运行失败", "執行失敗", "Run failed", "Échec de l'exécution", "実行失敗", "실행 실패", "La ejecución falló"),
@@ -68,7 +66,7 @@
       note: l("说明", "說明", "Note", "Note", "補足", "참고", "Nota"),
       footerDocs: l("查看完整源码与发布仓库。", "查看完整原始碼與發佈倉庫。", "Browse the source repositories and published docs.", "Parcourez les dépôts source et la documentation publiée.", "ソースリポジトリと公開ドキュメントを見る。", "소스 저장소와 배포 문서를 확인하세요.", "Consulta los repositorios fuente y la documentación publicada."),
       sourceLinks: l("源码链接", "原始碼連結", "Source links", "Liens source", "ソースリンク", "소스 링크", "Enlaces al código"),
-      keyboardHint: l("支持 Cmd/Ctrl + Enter 运行。", "支援 Cmd/Ctrl + Enter 執行。", "Cmd/Ctrl + Enter also runs the example.", "Cmd/Ctrl + Entrée exécute aussi l'exemple.", "Cmd/Ctrl + Enter でも実行できます。", "Cmd/Ctrl + Enter로도 실행할 수 있습니다.", "También puedes ejecutar con Cmd/Ctrl + Enter."),
+      autoRunHint: l("切换解析模式或迭代次数也会立即重新运行。", "切換解析模式或迭代次數也會立即重新執行。", "Changing the parse mode or iteration count reruns the example immediately.", "Changer le mode de lecture ou le nombre d'itérations relance l'exemple immédiatement.", "解析モードや反復回数を変えるとすぐ再実行されます。", "파싱 모드나 반복 횟수를 바꾸면 예제가 즉시 다시 실행됩니다.", "Cambiar el modo de análisis o el número de iteraciones vuelve a ejecutar el ejemplo al instante."),
     },
     pages: {
       home: {
@@ -132,17 +130,28 @@
           {
             type: "install",
             kicker: l("安装", "安裝", "Install", "Installation", "インストール", "설치", "Instalación"),
-            title: l("通过 PyPI 安装", "透過 PyPI 安裝", "Install from PyPI", "Installer depuis PyPI", "PyPI からインストール", "PyPI에서 설치", "Instalar desde PyPI"),
-            codeLabel: "shell",
-            code: "pip install smartdict",
+            title: l("同时安装 python 与 js 版本", "同時安裝 python 與 js 版本", "Install both the python and js versions", "Installer les versions python et js", "python 版と js 版を両方インストール", "python 버전과 js 버전을 함께 설치", "Instalar tanto la versión de python como la de js"),
+            body: l(
+              "如果你只在 Python 里用 smartdict，装 PyPI 包就够了；如果你还要在浏览器或 Node 里跑同样的案例，再装 smartdict-js。",
+              "如果你只在 Python 裡用 smartdict，裝 PyPI 套件就夠了；如果你還要在瀏覽器或 Node 裡跑同樣的案例，再裝 smartdict-js。",
+              "If you only use smartdict in Python, the PyPI package is enough. If you also want the same behavior in the browser or Node, install smartdict-js as well.",
+              "Si vous n'utilisez smartdict qu'en Python, le paquet PyPI suffit. Si vous voulez aussi le même comportement dans le navigateur ou Node, installez également smartdict-js.",
+              "Python だけで使うなら PyPI パッケージで十分です。ブラウザや Node でも同じ挙動を使いたいなら smartdict-js も入れてください。",
+              "Python에서만 쓴다면 PyPI 패키지만으로 충분합니다. 브라우저나 Node에서도 같은 동작을 쓰려면 smartdict-js도 설치하세요.",
+              "Si solo usas smartdict en Python, el paquete de PyPI es suficiente. Si también quieres el mismo comportamiento en el navegador o en Node, instala smartdict-js."
+            ),
+            blocks: [
+              { codeLabel: "python / pip", code: "pip install smartdict" },
+              { codeLabel: "js / npm", code: "npm install smartdict-js" },
+            ],
             note: l(
-              "本手册基于当前 smartdict-python 源码，并与 smartdict 0.5.0 行为保持一致。",
-              "本手冊基於目前的 smartdict-python 原始碼，並與 smartdict 0.5.0 的行為保持一致。",
-              "This handbook tracks the current smartdict-python source and matches smartdict 0.5.0 behavior.",
-              "Ce manuel suit la source actuelle de smartdict-python et reflète le comportement de smartdict 0.5.0.",
-              "この handbook は現行の smartdict-python ソースをもとにし、smartdict 0.5.0 の挙動に合わせています。",
-              "이 handbook는 현재 smartdict-python 소스를 기준으로 하며 smartdict 0.5.0 동작과 맞춰져 있습니다.",
-              "Este manual sigue el código actual de smartdict-python y coincide con el comportamiento de smartdict 0.5.0."
+              "本手册基于当前 smartdict-python 与 smartdict-js 源码，两者都对齐 smartdict 0.5.0 这组能力。",
+              "本手冊基於目前的 smartdict-python 與 smartdict-js 原始碼，兩者都對齊 smartdict 0.5.0 這組能力。",
+              "This handbook tracks both the current smartdict-python and smartdict-js sources, aligned around the smartdict 0.5.0 feature set.",
+              "Ce manuel suit à la fois les sources actuelles de smartdict-python et smartdict-js, alignées sur l'ensemble de fonctionnalités smartdict 0.5.0.",
+              "この handbook は smartdict-python と smartdict-js の現行ソースをもとにし、smartdict 0.5.0 の機能セットに揃えています。",
+              "이 handbook는 smartdict-python과 smartdict-js의 현재 소스를 기준으로 하며, smartdict 0.5.0 기능 집합에 맞춰져 있습니다.",
+              "Este manual sigue tanto el código actual de smartdict-python como el de smartdict-js, alineados con el conjunto de funciones de smartdict 0.5.0."
             ),
           },
           {
@@ -161,7 +170,7 @@
             cases: [
               {
                 title: l("快速开始", "快速開始", "Quick start", "Démarrage rapide", "クイックスタート", "빠른 시작", "Inicio rápido"),
-                summary: l("编辑左侧配置，点击运行后查看最终的展开结果。", "編輯左側設定，點擊執行後查看最終展開結果。", "Edit the config on the left and run it to inspect the expanded result.", "Modifiez la configuration à gauche puis exécutez-la pour voir le résultat développé.", "左側の設定を編集して実行し、展開結果を確認します。", "왼쪽 설정을 수정한 뒤 실행해 최종 확장 결과를 확인하세요.", "Edita la configuración a la izquierda y ejecútala para ver el resultado expandido."),
+                summary: l("编辑左侧配置，离开输入框后查看最终的展开结果。", "編輯左側設定，離開輸入框後查看最終展開結果。", "Edit the config on the left, then blur the editor to inspect the expanded result.", "Modifiez la configuration à gauche puis quittez l'éditeur pour voir le résultat développé.", "左側の設定を編集し、フォーカスを外して展開結果を確認します。", "왼쪽 설정을 수정한 뒤 포커스를 벗어나 최종 확장 결과를 확인하세요.", "Edita la configuración a la izquierda y luego quita el foco para ver el resultado expandido."),
                 mode: "strict",
                 source: `{
   dataset: "spotify",
@@ -690,13 +699,13 @@ return {
             kicker: l("自由编辑", "自由編輯", "Edit freely", "Édition libre", "自由編集", "자유 편집", "Edición libre"),
             title: l("从这些起步，然后继续改", "從這些起步，然後繼續改", "Start from these, then keep editing", "Partez de ces exemples puis continuez à modifier", "ここから始めて自由に改変", "이 예제에서 시작해 계속 바꾸기", "Empieza con estos y sigue editando"),
             body: l(
-              "这里我保留了运行按钮，而不是每次输入都自动重算右侧结果。这样写到一半时不会被语法错误打断。",
-              "這裡我保留了執行按鈕，而不是每次輸入都自動重算右側結果。這樣寫到一半時不會被語法錯誤打斷。",
-              "This page keeps an explicit run button instead of recomputing the right pane on every keystroke, so half-written edits are less disruptive.",
-              "Cette page garde un bouton d'exécution explicite au lieu de recalculer à chaque frappe, afin d'éviter que les erreurs de syntaxe n'interrompent l'édition.",
-              "このページでは毎入力ごとに再計算せず、実行ボタン方式にしています。書きかけのコードが途中で崩れにくいためです。",
-              "이 페이지는 입력마다 자동 재계산하지 않고 실행 버튼 방식을 유지합니다. 작성 도중 문법 오류로 흐름이 끊기지 않게 하기 위해서입니다.",
-              "Esta página mantiene un botón explícito de ejecución en lugar de recalcular en cada pulsación, para no interrumpir ediciones a medio escribir."
+              "这里的案例默认左侧直接编辑，编辑时保持高亮；当输入框失焦时，右侧结果会自动重新编译。",
+              "這裡的案例預設左側直接編輯，編輯時保持高亮；當輸入框失焦時，右側結果會自動重新編譯。",
+              "Examples here are edited directly on the left with live highlighting, and the right pane recompiles automatically when the editor loses focus.",
+              "Les exemples se modifient directement à gauche avec coloration en direct, et le panneau de droite se recompile automatiquement lorsque l'éditeur perd le focus.",
+              "ここでは左側を直接編集でき、入力中もハイライトされます。フォーカスが外れると右側が自動再コンパイルされます。",
+              "여기서는 왼쪽을 직접 편집할 수 있고 입력 중에도 하이라이트됩니다. 포커스가 빠지면 오른쪽 결과가 자동으로 다시 컴파일됩니다.",
+              "Aquí los ejemplos se editan directamente a la izquierda con resaltado en vivo, y el panel derecho se recompila automáticamente cuando el editor pierde el foco."
             ),
             cases: [
               {
