@@ -2,6 +2,7 @@ const handbook = window.HANDBOOK_CONTENT;
 const pageId = document.body.getAttribute("data-page");
 const siteNav = document.getElementById("site-nav");
 const navToggle = document.querySelector(".nav-toggle");
+const siteBrandVersion = document.querySelector(".site-brand-version");
 const mainRoot = document.querySelector("main.page");
 const footerRoot = document.querySelector("footer.site-footer");
 
@@ -182,7 +183,6 @@ function renderHero(hero, locale) {
   return `
     <section class="${pageId === "home" ? "hero" : "page-hero"}">
       <div class="${pageId === "home" ? "hero-copy" : "page-hero-copy"}">
-        <p class="eyebrow">${escapeHtml(t(hero.eyebrow, locale))}</p>
         <h1>${escapeHtml(t(hero.title, locale))}</h1>
         <p class="${pageId === "home" ? "hero-text" : "page-hero-text"}">${escapeHtml(t(hero.text, locale))}</p>
         ${actions ? `<div class="hero-actions">${actions}</div>` : ""}
@@ -404,6 +404,12 @@ function syncNavigation(locale) {
 
 }
 
+function syncBranding() {
+  if (siteBrandVersion && handbook?.version) {
+    siteBrandVersion.textContent = handbook.version;
+  }
+}
+
 function initCaseLab(card, locale) {
   const editor = card.querySelector(".editor-input");
   const editorShell = card.querySelector(".editor-shell");
@@ -558,6 +564,7 @@ function render(locale) {
   document.title = t(page.title, locale);
 
   ensureLocaleControl(locale);
+  syncBranding();
   syncNavigation(locale);
 
   const sectionsHtml = page.sections.map((section) => renderSection(section, locale)).join("");

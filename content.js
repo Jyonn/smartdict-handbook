@@ -10,6 +10,7 @@
   });
 
   const handbook = {
+    version: "0.5.1",
     locales: [
       { code: "zh-CN", label: "简中" },
       { code: "zh-TW", label: "繁中" },

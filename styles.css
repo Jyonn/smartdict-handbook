@@ -57,14 +57,50 @@ pre {
 .site-brand {
   display: flex;
   align-items: center;
+  gap: 12px;
   text-decoration: none;
   color: inherit;
 }
 
+.site-brand-lockup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
 .site-brand-logo {
-  height: 48px;
+  height: 46px;
   width: auto;
   max-width: 34vw;
+}
+
+.site-brand-copy {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  line-height: 1;
+  color: var(--accent-strong);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.site-brand-version {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
 }
 
 .site-nav {
@@ -182,7 +218,6 @@ pre {
   animation: rise 0.6s ease both;
 }
 
-.eyebrow,
 .section-kicker {
   margin: 0 0 12px;
   text-transform: uppercase;
@@ -810,6 +845,21 @@ pre code {
   .site-header {
     flex-wrap: wrap;
     align-items: flex-start;
+  }
+
+  .site-brand {
+    gap: 10px;
+  }
+
+  .site-brand-copy {
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+  }
+
+  .site-brand-version {
+    min-height: 28px;
+    padding: 0 10px;
+    font-size: 0.72rem;
   }
 
   .site-controls {
