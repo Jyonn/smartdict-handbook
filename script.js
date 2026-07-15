@@ -290,6 +290,9 @@ function renderCase(caseDef, locale, index) {
         <section class="case-side case-side-output">
           <div class="case-pane-head">
             <span>${escapeHtml(t(handbook.ui.result, locale))}</span>
+            <div class="case-pane-actions">
+              <button class="copy-button icon-button" data-copy-role="output" aria-label="${escapeHtml(t(handbook.ui.copy, locale))}" title="${escapeHtml(t(handbook.ui.copy, locale))}">${getIcon("copy")}</button>
+            </div>
           </div>
           <pre class="case-output"><code class="language-json"></code></pre>
         </section>
