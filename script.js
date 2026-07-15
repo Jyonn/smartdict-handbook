@@ -464,7 +464,7 @@ function initCaseLab(card, locale) {
 
     try {
       if (!window.smartdict) {
-        throw new Error("smartdict-js browser bundle is not available on this page.");
+        throw new Error("smartdict browser bundle is not available on this page.");
       }
 
       const input = evaluateSource(editor.value);

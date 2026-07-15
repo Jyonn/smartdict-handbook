@@ -42,13 +42,13 @@
         "Todos los ejemplos se pueden editar y ejecutar, y el editor izquierdo resalta en tiempo real."
       ),
       examplesRunWith: l(
-        "案例在浏览器中通过 smartdict-js 运行，数据结构语义与 Python 版本保持一致。",
-        "案例在瀏覽器中透過 smartdict-js 執行，資料結構語義與 Python 版本保持一致。",
-        "Examples run in the browser with smartdict-js while preserving the same data-structure semantics as the Python package.",
-        "Les exemples s'exécutent dans le navigateur avec smartdict-js tout en conservant la même sémantique que la version Python.",
-        "例はブラウザ上で smartdict-js を使って実行され、Python 版と同じデータ構造の意味を保ちます。",
-        "예제는 브라우저에서 smartdict-js로 실행되며 Python 버전과 같은 데이터 구조 의미를 유지합니다.",
-        "Los ejemplos se ejecutan en el navegador con smartdict-js y conservan la misma semántica de estructuras de datos que la versión de Python."
+        "案例在浏览器中通过 smartdict 的 JavaScript 版本运行，数据结构语义与 Python 版本保持一致。",
+        "案例在瀏覽器中透過 smartdict 的 JavaScript 版本執行，資料結構語義與 Python 版本保持一致。",
+        "Examples run in the browser with smartdict for JavaScript while preserving the same data-structure semantics as the Python package.",
+        "Les exemples s'exécutent dans le navigateur avec smartdict pour JavaScript tout en conservant la même sémantique que la version Python.",
+        "例はブラウザ上で smartdict の JavaScript 版を使って実行され、Python 版と同じデータ構造の意味を保ちます。",
+        "예제는 브라우저에서 smartdict JavaScript 버전으로 실행되며 Python 버전과 같은 데이터 구조 의미를 유지합니다.",
+        "Los ejemplos se ejecutan en el navegador con smartdict para JavaScript y conservan la misma semántica de estructuras de datos que la versión de Python."
       ),
       reset: l("重置", "重設", "Reset", "Réinitialiser", "リセット", "재설정", "Restablecer"),
       copy: l("复制", "複製", "Copy", "Copier", "コピー", "복사", "Copiar"),
@@ -135,17 +135,17 @@
             kicker: l("安装", "安裝", "Install", "Installation", "インストール", "설치", "Instalación"),
             title: l("同时安装 python 与 js 版本", "同時安裝 python 與 js 版本", "Install both the python and js versions", "Installer les versions python et js", "python 版と js 版を両方インストール", "python 버전과 js 버전을 함께 설치", "Instalar tanto la versión de python como la de js"),
             body: l(
-              "如果你只在 Python 里用 smartdict，装 PyPI 包就够了；如果你还要在浏览器或 Node 里跑同样的案例，再装 smartdict-js。",
-              "如果你只在 Python 裡用 smartdict，裝 PyPI 套件就夠了；如果你還要在瀏覽器或 Node 裡跑同樣的案例，再裝 smartdict-js。",
-              "If you only use smartdict in Python, the PyPI package is enough. If you also want the same behavior in the browser or Node, install smartdict-js as well.",
-              "Si vous n'utilisez smartdict qu'en Python, le paquet PyPI suffit. Si vous voulez aussi le même comportement dans le navigateur ou Node, installez également smartdict-js.",
-              "Python だけで使うなら PyPI パッケージで十分です。ブラウザや Node でも同じ挙動を使いたいなら smartdict-js も入れてください。",
-              "Python에서만 쓴다면 PyPI 패키지만으로 충분합니다. 브라우저나 Node에서도 같은 동작을 쓰려면 smartdict-js도 설치하세요.",
-              "Si solo usas smartdict en Python, el paquete de PyPI es suficiente. Si también quieres el mismo comportamiento en el navegador o en Node, instala smartdict-js."
+              "如果你只在 Python 里用 smartdict，装 PyPI 包就够了；如果你还要在浏览器或 Node 里跑同样的案例，再装 npm 包 smartdict。",
+              "如果你只在 Python 裡用 smartdict，裝 PyPI 套件就夠了；如果你還要在瀏覽器或 Node 裡跑同樣的案例，再裝 npm 套件 smartdict。",
+              "If you only use smartdict in Python, the PyPI package is enough. If you also want the same behavior in the browser or Node, install the npm package smartdict as well.",
+              "Si vous n'utilisez smartdict qu'en Python, le paquet PyPI suffit. Si vous voulez aussi le même comportement dans le navigateur ou Node, installez également le paquet npm smartdict.",
+              "Python だけで使うなら PyPI パッケージで十分です。ブラウザや Node でも同じ挙動を使いたいなら npm パッケージ smartdict も入れてください。",
+              "Python에서만 쓴다면 PyPI 패키지만으로 충분합니다. 브라우저나 Node에서도 같은 동작을 쓰려면 npm 패키지 smartdict도 설치하세요.",
+              "Si solo usas smartdict en Python, el paquete de PyPI es suficiente. Si también quieres el mismo comportamiento en el navegador o en Node, instala también el paquete npm smartdict."
             ),
             blocks: [
               { codeLabel: "python / pip", code: "pip install smartdict" },
-              { codeLabel: "js / npm", code: "npm install smartdict-js" },
+              { codeLabel: "js / npm", code: "npm install smartdict" },
             ],
             note: l(
               "本手册基于当前 smartdict-python 与 smartdict-js 源码，两者都对齐 smartdict 0.5.1 这组能力。",
@@ -717,13 +717,13 @@ return {
           eyebrow: l("交互页", "互動頁", "Interactive page", "Page interactive", "インタラクティブページ", "인터랙티브 페이지", "Página interactiva"),
           title: l("Playground", "Playground", "Playground", "Playground", "Playground", "Playground", "Playground"),
           text: l(
-            "这里放的是更偏“拿来改”的案例。你可以直接把它当成 smartdict-js 的在线实验台，也可以拿它验证 Python 配置行为。",
-            "這裡放的是更偏「拿來改」的案例。你可以直接把它當成 smartdict-js 的線上實驗台，也可以拿它驗證 Python 設定行為。",
-            "This page leans more toward open-ended tinkering. Use it as an online lab for smartdict-js or as a fast way to validate Python config behavior.",
-            "Cette page est pensée pour l'exploration libre. Utilisez-la comme laboratoire en ligne pour smartdict-js ou comme validation rapide du comportement Python.",
-            "このページは自由に試すための場所です。smartdict-js のオンライン実験台としても、Python 設定挙動の確認にも使えます。",
-            "이 페이지는 자유롭게 실험하기 위한 곳입니다. smartdict-js의 온라인 실험실이자 Python 설정 동작을 빠르게 검증하는 도구로 쓸 수 있습니다.",
-            "Esta página está pensada para experimentar libremente. Úsala como laboratorio en línea para smartdict-js o para validar rápidamente el comportamiento de la configuración en Python."
+            "这里放的是更偏“拿来改”的案例。你可以直接把它当成 smartdict 的在线实验台，也可以拿它验证 Python 配置行为。",
+            "這裡放的是更偏「拿來改」的案例。你可以直接把它當成 smartdict 的線上實驗台，也可以拿它驗證 Python 設定行為。",
+            "This page leans more toward open-ended tinkering. Use it as an online lab for smartdict or as a fast way to validate Python config behavior.",
+            "Cette page est pensée pour l'exploration libre. Utilisez-la comme laboratoire en ligne pour smartdict ou comme validation rapide du comportement Python.",
+            "このページは自由に試すための場所です。smartdict のオンライン実験台としても、Python 設定挙動の確認にも使えます。",
+            "이 페이지는 자유롭게 실험하기 위한 곳입니다. smartdict의 온라인 실험실이자 Python 설정 동작을 빠르게 검증하는 도구로 쓸 수 있습니다.",
+            "Esta página está pensada para experimentar libremente. Úsala como laboratorio en línea para smartdict o para validar rápidamente el comportamiento de la configuración en Python."
           ),
         },
         sections: [
