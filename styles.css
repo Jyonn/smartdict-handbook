@@ -66,17 +66,20 @@ pre {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2px;
+  gap: 6px;
   min-width: 0;
+  width: 126px;
 }
 
 .site-brand-logo {
-  height: 46px;
-  width: auto;
-  max-width: 34vw;
+  width: 100%;
+  height: auto;
+  max-width: min(126px, 30vw);
 }
 
 .site-brand-copy {
+  display: block;
+  width: 100%;
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.68rem;
   font-weight: 500;
@@ -85,6 +88,7 @@ pre {
   color: var(--accent-strong);
   text-transform: uppercase;
   white-space: nowrap;
+  text-align: center;
 }
 
 .site-brand-version {
@@ -849,6 +853,11 @@ pre code {
 
   .site-brand {
     gap: 10px;
+  }
+
+  .site-brand-lockup {
+    width: 108px;
+    gap: 5px;
   }
 
   .site-brand-copy {
