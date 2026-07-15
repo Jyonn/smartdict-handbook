@@ -73,7 +73,7 @@
       home: {
         title: l("smartdict", "smartdict", "smartdict", "smartdict", "smartdict", "smartdict", "smartdict"),
         hero: {
-          eyebrow: l("smartdict 0.5.0", "smartdict 0.5.0", "smartdict 0.5.0", "smartdict 0.5.0", "smartdict 0.5.0", "smartdict 0.5.0", "smartdict 0.5.0"),
+          eyebrow: l("smartdict 0.5.1", "smartdict 0.5.1", "smartdict 0.5.1", "smartdict 0.5.1", "smartdict 0.5.1", "smartdict 0.5.1", "smartdict 0.5.1"),
           title: l("类型友好的配置引用。", "型別友好的設定引用。", "Typed config references.", "Références de configuration typées.", "型を保つ設定参照。", "타입을 보존하는 설정 참조.", "Referencias de configuración con tipos."),
           text: l(
             "smartdict 用来解析嵌套配置里的引用表达式，同时尽量保留原生类型。它支持 JSON 默认值、fallback chain、轻量 pipeline，以及严格/部分/迭代三种解析模式。",
@@ -146,13 +146,13 @@
               { codeLabel: "js / npm", code: "npm install smartdict-js" },
             ],
             note: l(
-              "本手册基于当前 smartdict-python 与 smartdict-js 源码，两者都对齐 smartdict 0.5.0 这组能力。",
-              "本手冊基於目前的 smartdict-python 與 smartdict-js 原始碼，兩者都對齊 smartdict 0.5.0 這組能力。",
-              "This handbook tracks both the current smartdict-python and smartdict-js sources, aligned around the smartdict 0.5.0 feature set.",
-              "Ce manuel suit à la fois les sources actuelles de smartdict-python et smartdict-js, alignées sur l'ensemble de fonctionnalités smartdict 0.5.0.",
-              "この handbook は smartdict-python と smartdict-js の現行ソースをもとにし、smartdict 0.5.0 の機能セットに揃えています。",
-              "이 handbook는 smartdict-python과 smartdict-js의 현재 소스를 기준으로 하며, smartdict 0.5.0 기능 집합에 맞춰져 있습니다.",
-              "Este manual sigue tanto el código actual de smartdict-python como el de smartdict-js, alineados con el conjunto de funciones de smartdict 0.5.0."
+              "本手册基于当前 smartdict-python 与 smartdict-js 源码，两者都对齐 smartdict 0.5.1 这组能力。",
+              "本手冊基於目前的 smartdict-python 與 smartdict-js 原始碼，兩者都對齊 smartdict 0.5.1 這組能力。",
+              "This handbook tracks both the current smartdict-python and smartdict-js sources, aligned around the smartdict 0.5.1 feature set.",
+              "Ce manuel suit à la fois les sources actuelles de smartdict-python et smartdict-js, alignées sur l'ensemble de fonctionnalités smartdict 0.5.1.",
+              "この handbook は smartdict-python と smartdict-js の現行ソースをもとにし、smartdict 0.5.1 の機能セットに揃えています。",
+              "이 handbook는 smartdict-python과 smartdict-js의 현재 소스를 기준으로 하며, smartdict 0.5.1 기능 집합에 맞춰져 있습니다.",
+              "Este manual sigue tanto el código actual de smartdict-python como el de smartdict-js, alineados con el conjunto de funciones de smartdict 0.5.1."
             ),
           },
           {
