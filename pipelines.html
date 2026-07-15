@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartDict Handbook · Pipelines</title>
+  <meta name="description" content="SmartDict pipelines: execution order, built-in stages, typed transformations, and pipeline errors.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="pipelines">
+  <header class="site-header">
+    <a class="site-brand" href="./index.html">
+      <span class="site-brand-mark">SD</span>
+      <span class="site-brand-copy">
+        <strong>SmartDict</strong>
+        <span>Handbook</span>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav">
+      <a href="./index.html" data-nav="home">Overview</a>
+      <a href="./references.html" data-nav="references">References</a>
+      <a href="./defaults-json.html" data-nav="defaults">Defaults & JSON</a>
+      <a href="./pipelines.html" data-nav="pipelines">Pipelines</a>
+      <a href="./modes-errors.html" data-nav="modes">Modes & Errors</a>
+      <a href="./recipes.html" data-nav="recipes">Recipes</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-hero">
+      <p class="eyebrow">Feature Page</p>
+      <h1>Pipelines transform values after resolution</h1>
+      <p class="page-hero-text">
+        Pipeline syntax follows <code>${ref[:default][|stage]...}</code>.
+        SmartDict resolves the reference first, applies the default if missing,
+        then runs stages from left to right.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Execution Model</p>
+        <h2>The order is fixed</h2>
+      </div>
+      <div class="grid three-up">
+        <article class="card">
+          <h3>1. Resolve</h3>
+          <p>Look up the reference from the current config object.</p>
+        </article>
+        <article class="card">
+          <h3>2. Default</h3>
+          <p>Use the fallback value if the reference is unresolved.</p>
+        </article>
+        <article class="card">
+          <h3>3. Transform</h3>
+          <p>Apply stages left to right, preserving native values where possible.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Case 1</p>
+        <h2>String cleanup and slug generation</h2>
+      </div>
+      <div class="code-block">
+        <div class="code-block-head">
+          <span>python</span>
+          <button class="copy-button" data-copy-target="pipeline-case-1">Copy</button>
+        </div>
+        <pre><code id="pipeline-case-1">smartdict.parse({
+    "dataset": "  My Dataset  ",
+    "save_dir": "${dataset|strip|lower|slug}",
+})
+# {'dataset': '  My Dataset  ', 'save_dir': 'my-dataset'}</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Case 2</p>
+        <h2>Typed fallback values followed by conversion</h2>
+      </div>
+      <div class="grid two-up">
+        <article class="card">
+          <h3>Fallback path</h3>
+          <div class="code-block compact">
+            <pre><code>smartdict.parse({
+    "port": "${env.PORT:8000|int}",
+})
+# {'port': 8000}</code></pre>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Existing value path</h3>
+          <div class="code-block compact">
+            <pre><code>smartdict.parse({
+    "env": {"PORT": "9000"},
+    "port": "${env.PORT:8000|int}",
+})
+# {'env': {'PORT': '9000'}, 'port': 9000}</code></pre>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Case 3</p>
+        <h2>JSON stage</h2>
+      </div>
+      <div class="code-block compact">
+        <pre><code>smartdict.parse({
+    "raw": '{"hello": "world"}',
+    "value": "${raw|json}",
+})
+# {'raw': '{"hello": "world"}', 'value': {'hello': 'world'}}</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Case 4</p>
+        <h2>Pipelines can follow nested defaults</h2>
+      </div>
+      <div class="code-block compact">
+        <pre><code>smartdict.parse({
+    "repr_source_model": "TEXT-EMBEDDING-3-SMALL",
+    "embedding_model": "${sid_embedding_model:${repr_source_model:null}|lower}",
+})
+# {'repr_source_model': 'TEXT-EMBEDDING-3-SMALL', 'embedding_model': 'text-embedding-3-small'}</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Built-ins</p>
+        <h2>Current pipeline stages</h2>
+      </div>
+      <div class="grid stage-grid">
+        <article class="card">
+          <h3>Conversion stages</h3>
+          <ul class="feature-list">
+            <li><code>int</code></li>
+            <li><code>float</code></li>
+            <li><code>bool</code></li>
+            <li><code>json</code></li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>String stages</h3>
+          <ul class="feature-list">
+            <li><code>lower</code></li>
+            <li><code>upper</code></li>
+            <li><code>strip</code></li>
+            <li><code>slug</code></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Failure Modes</p>
+        <h2>Pipeline stage errors are structured</h2>
+      </div>
+      <div class="code-block compact">
+        <pre><code>smartdict.parse({
+    "port": "${env.PORT:abc|int}",
+})
+# raises PipelineStageError</code></pre>
+      </div>
+      <p class="section-lead">
+        Unknown stages and failed conversions both raise
+        <code>PipelineStageError</code>, which includes the stage name, failing
+        value, and field path.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Next: parsing strategies in <a href="./modes-errors.html">Modes & Errors</a>.</p>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartDict Handbook · Defaults and JSON</title>
+  <meta name="description" content="SmartDict defaults, JSON defaults, nested fallbacks, and typed behavior.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="defaults">
+  <header class="site-header">
+    <a class="site-brand" href="./index.html">
+      <span class="site-brand-mark">SD</span>
+      <span class="site-brand-copy">
+        <strong>SmartDict</strong>
+        <span>Handbook</span>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav">
+      <a href="./index.html" data-nav="home">Overview</a>
+      <a href="./references.html" data-nav="references">References</a>
+      <a href="./defaults-json.html" data-nav="defaults">Defaults & JSON</a>
+      <a href="./pipelines.html" data-nav="pipelines">Pipelines</a>
+      <a href="./modes-errors.html" data-nav="modes">Modes & Errors</a>
+      <a href="./recipes.html" data-nav="recipes">Recipes</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-hero">
+      <p class="eyebrow">Feature Page</p>
+      <h1>Defaults, JSON values, and fallback chains</h1>
+      <p class="page-hero-text">
+        SmartDict treats defaults as typed data whenever possible. Scalars, lists,
+        dictionaries, nested fallback chains, and JSON values can all survive
+        parsing without being collapsed into strings.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Case 1</p>
+        <h2>Scalar defaults</h2>
+      </div>
+      <div class="code-block">
+        <div class="code-block-head">
+          <span>python</span>
+          <button class="copy-button" data-copy-target="default-case-1">Copy</button>
+        </div>
+        <pre><code id="default-case-1">smartdict.parse({
+    "int_value": "${missing:42}",
+    "bool_value": "${missing:true}",
+    "null_value": "${missing:null}",
+    "text_value": "${missing:fallback}",
+})
+# {
+#   'int_value': 42,
+#   'bool_value': True,
+#   'null_value': None,
+#   'text_value': 'fallback'
+# }</code></pre>
+      </div>
+      <div class="callout">
+        <strong>Rule:</strong>
+        SmartDict first tries JSON parsing for defaults, then falls back to the
+        original loose string behavior so bare strings like <code>fallback</code>
+        still work.
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Case 2</p>
+        <h2>JSON array and object defaults</h2>
+      </div>
+      <div class="grid two-up">
+        <article class="card">
+          <h3>List default</h3>
+          <div class="code-block compact">
+            <pre><code>smartdict.parse({
+    "sinkhorn_epsilon": "${sid_sinkhorn_epsilon:[0.0, 0.0, 0.003]}",
+})
+# {'sinkhorn_epsilon': [0.0, 0.0, 0.003]}</code></pre>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Dict default</h3>
+          <div class="code-block compact">
+            <pre><code>smartdict.parse({
+    "metadata": '${config:{"hello": "world"}}',
+})
+# {'metadata': {'hello': 'world'}}</code></pre>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Case 3</p>
+        <h2>JSON values can contain colons safely</h2>
+      </div>
+      <div class="code-block compact">
+        <pre><code>smartdict.parse({
+    "value": '${config:{"hello": "a:b", "url": "https://example.com"}}',
+})
+# {'value': {'hello': 'a:b', 'url': 'https://example.com'}}</code></pre>
+      </div>
+      <p class="section-lead">
+        The parser distinguishes the top-level default separator from the colons
+        inside the JSON object itself.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Case 4</p>
+        <h2>Primary value wins over the default</h2>
+      </div>
+      <div class="code-block compact">
+        <pre><code>smartdict.parse({
+    "sid_sinkhorn_epsilon": [1.0, 2.0, 3.0],
+    "sinkhorn_epsilon": "${sid_sinkhorn_epsilon:[0.0, 0.0, 0.003]}",
+})
+# {'sid_sinkhorn_epsilon': [1.0, 2.0, 3.0], 'sinkhorn_epsilon': [1.0, 2.0, 3.0]}</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Case 5</p>
+        <h2>Nested fallback chains</h2>
+      </div>
+      <div class="code-block">
+        <div class="code-block-head">
+          <span>python</span>
+          <button class="copy-button" data-copy-target="default-case-5">Copy</button>
+        </div>
+        <pre><code id="default-case-5">smartdict.parse({
+    "repr_source_model": "text-embedding-3-small",
+    "embedding_model": "${sid_embedding_model:${repr_source_model:null}}",
+})
+# {'repr_source_model': 'text-embedding-3-small', 'embedding_model': 'text-embedding-3-small'}
+
+smartdict.parse({
+    "embedding_model": "${sid_embedding_model:${repr_source_model:null}}",
+})
+# {'embedding_model': None}</code></pre>
+      </div>
+      <p class="section-lead">
+        You can chain fallbacks so one missing value falls back to another
+        reference, which may itself have a typed default.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Next: transform resolved values in <a href="./pipelines.html">Pipelines</a>.</p>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>

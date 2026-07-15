@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartDict Handbook · Modes and Errors</title>
+  <meta name="description" content="SmartDict parse modes, unresolved handling, iterative parsing, and structured error types.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="modes">
+  <header class="site-header">
+    <a class="site-brand" href="./index.html">
+      <span class="site-brand-mark">SD</span>
+      <span class="site-brand-copy">
+        <strong>SmartDict</strong>
+        <span>Handbook</span>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav">
+      <a href="./index.html" data-nav="home">Overview</a>
+      <a href="./references.html" data-nav="references">References</a>
+      <a href="./defaults-json.html" data-nav="defaults">Defaults & JSON</a>
+      <a href="./pipelines.html" data-nav="pipelines">Pipelines</a>
+      <a href="./modes-errors.html" data-nav="modes">Modes & Errors</a>
+      <a href="./recipes.html" data-nav="recipes">Recipes</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-hero">
+      <p class="eyebrow">Feature Page</p>
+      <h1>Parse modes and structured errors</h1>
+      <p class="page-hero-text">
+        SmartDict gives you three parsing strategies and several focused exception
+        types so configs can either fail fast or stay partially unresolved,
+        depending on the phase of your workflow.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Mode 1</p>
+        <h2><code>smartdict.parse(obj)</code></h2>
+      </div>
+      <div class="card">
+        <p>
+          Strict mode. Resolves everything it can and raises an error if unresolved
+          references remain at the end.
+        </p>
+        <div class="code-block compact">
+          <pre><code>smartdict.parse({
+    "a": "${missing}",
+})
+# raises ReferenceNotFoundError</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Mode 2</p>
+        <h2><code>smartdict.partial_parse(obj)</code></h2>
+      </div>
+      <div class="card">
+        <p>
+          Best-effort mode. Missing references stay as placeholders such as
+          <code>${missing}</code> instead of raising.
+        </p>
+        <div class="code-block compact">
+          <pre><code>smartdict.partial_parse({
+    "a": "${missing}",
+    "b": "pre-${missing}-post",
+    "c": "${missing}$",
+})
+# {
+#   'a': '${missing}',
+#   'b': 'pre-${missing}-post',
+#   'c': '${missing}$'
+# }</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Mode 3</p>
+        <h2><code>smartdict.iterative_parse(obj, iterations=N)</code></h2>
+      </div>
+      <div class="card">
+        <p>
+          Repeated best-effort parsing. This is useful when the first pass resolves
+          values that unlock later passes.
+        </p>
+        <div class="code-block compact">
+          <pre><code>smartdict.iterative_parse({
+    "a": "${b}",
+    "b": "${c}",
+    "c": "ok",
+}, iterations=2)
+# {'a': 'ok', 'b': 'ok', 'c': 'ok'}</code></pre>
+        </div>
+      </div>
+      <div class="callout">
+        <strong>Guardrail:</strong>
+        <code>iterations</code> must be greater than zero. Passing
+        <code>0</code> raises <code>ValueError</code>.
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Errors</p>
+        <h2>What each exception means</h2>
+      </div>
+      <div class="grid feature-grid">
+        <article class="card">
+          <h3><code>ReferenceNotFoundError</code></h3>
+          <p>
+            Raised in strict mode when unresolved references remain. The exception
+            exposes structured entries in <code>exception.unresolved</code>.
+          </p>
+        </article>
+        <article class="card">
+          <h3><code>CircularReferenceError</code></h3>
+          <p>
+            Raised when a dependency chain loops back to itself, including cycles
+            across nested dictionaries.
+          </p>
+        </article>
+        <article class="card">
+          <h3><code>PipelineStageError</code></h3>
+          <p>
+            Raised when a pipeline stage is unknown or cannot convert the current
+            value, such as <code>${env.PORT:abc|int}</code>.
+          </p>
+        </article>
+        <article class="card">
+          <h3><code>ValueError</code></h3>
+          <p>
+            Raised for invalid parser configuration such as
+            <code>iterations &lt;= 0</code>.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Examples</p>
+        <h2>Error-shaped scenarios worth knowing</h2>
+      </div>
+      <div class="grid two-up">
+        <article class="card">
+          <h3>Nested missing reference</h3>
+          <div class="code-block compact">
+            <pre><code>smartdict.parse({
+    "app": {"profile": "prod"},
+    "services": {"prod": {"url": "${config.endpoints.api}"}},
+    "result": "${services.${app.profile}.url}",
+})
+# raises ReferenceNotFoundError</code></pre>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Cross-nested cycle</h3>
+          <div class="code-block compact">
+            <pre><code>smartdict.parse({
+    "app": {"profile": "${services.primary.profile}$"},
+    "services": {"primary": {"profile": "${app.profile}$"}},
+})
+# raises CircularReferenceError</code></pre>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Next: practical combinations in <a href="./recipes.html">Recipes</a>.</p>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>

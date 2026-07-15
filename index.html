@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartDict Handbook</title>
+  <meta
+    name="description"
+    content="Multi-page handbook for SmartDict 0.5.0, covering references, defaults, JSON values, pipelines, parse modes, and practical recipes."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="home">
+  <header class="site-header">
+    <a class="site-brand" href="./index.html">
+      <span class="site-brand-mark">SD</span>
+      <span class="site-brand-copy">
+        <strong>SmartDict</strong>
+        <span>Handbook</span>
+      </span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      Menu
+    </button>
+
+    <nav class="site-nav" id="site-nav">
+      <a href="./index.html" data-nav="home">Overview</a>
+      <a href="./references.html" data-nav="references">References</a>
+      <a href="./defaults-json.html" data-nav="defaults">Defaults & JSON</a>
+      <a href="./pipelines.html" data-nav="pipelines">Pipelines</a>
+      <a href="./modes-errors.html" data-nav="modes">Modes & Errors</a>
+      <a href="./recipes.html" data-nav="recipes">Recipes</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">SmartDict 0.5.0</p>
+        <h1>Resolve config references without losing Python types.</h1>
+        <p class="hero-text">
+          SmartDict is a small Python library for resolving references inside nested
+          dictionaries, lists, tuples, and object-backed configs. It supports native
+          value preservation, JSON defaults, lightweight pipelines, and strict or
+          partial parsing modes.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="./references.html">Learn the Syntax</a>
+          <a class="button button-secondary" href="./recipes.html">See Real Cases</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="code-card">
+          <div class="code-card-head">
+            <span>quick-start.py</span>
+            <button class="copy-button" data-copy-target="hero-snippet">Copy</button>
+          </div>
+          <pre><code id="hero-snippet">import smartdict
+
+config = {
+    "dataset": "Spotify Search",
+    "save_dir": "${dataset|strip|lower|slug}",
+    "port": "${env.PORT:8000|int}",
+    "metadata": '${details:{"owner": "jyonn"}}',
+}
+
+print(smartdict.parse(config))
+# {
+#   'dataset': 'Spotify Search',
+#   'save_dir': 'spotify-search',
+#   'port': 8000,
+#   'metadata': {'owner': 'jyonn'}
+# }</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Start Here</p>
+        <h2>What this handbook covers</h2>
+      </div>
+      <div class="grid feature-grid">
+        <article class="card">
+          <h3>Reference resolution</h3>
+          <p>
+            Reuse values with expressions like <code>${dataset}</code>,
+            <code>${load.base_path}</code>, or nested references such as
+            <code>${${keys.${env}}}</code>.
+          </p>
+          <a class="text-link" href="./references.html">Read reference syntax</a>
+        </article>
+        <article class="card">
+          <h3>Typed defaults</h3>
+          <p>
+            Defaults support numbers, booleans, <code>null</code>, arrays, objects,
+            and nested fallback chains while keeping native Python types.
+          </p>
+          <a class="text-link" href="./defaults-json.html">Read defaults and JSON</a>
+        </article>
+        <article class="card">
+          <h3>Pipelines</h3>
+          <p>
+            Transform resolved values with stages like <code>int</code>,
+            <code>json</code>, <code>strip</code>, and <code>slug</code>.
+          </p>
+          <a class="text-link" href="./pipelines.html">Read pipeline docs</a>
+        </article>
+        <article class="card">
+          <h3>Modes and errors</h3>
+          <p>
+            Choose between strict parse, partial parse, or iterative parse, and
+            understand how SmartDict reports unresolved references and stage failures.
+          </p>
+          <a class="text-link" href="./modes-errors.html">Read modes and errors</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Install</p>
+        <h2>Get the package from PyPI</h2>
+      </div>
+      <div class="code-block">
+        <div class="code-block-head">
+          <span>shell</span>
+          <button class="copy-button" data-copy-target="install-snippet">Copy</button>
+        </div>
+        <pre><code id="install-snippet">pip install smartdict</code></pre>
+      </div>
+      <div class="callout">
+        <strong>Version note:</strong>
+        this handbook is based on the current <code>smartdict-library</code> source and
+        matches the published <code>smartdict==0.5.0</code> behavior.
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Quick Start</p>
+        <h2>Minimal config example</h2>
+      </div>
+      <div class="code-block">
+        <div class="code-block-head">
+          <span>python</span>
+          <button class="copy-button" data-copy-target="quick-start-snippet">Copy</button>
+        </div>
+        <pre><code id="quick-start-snippet">import smartdict
+
+data = {
+    "dataset": "spotify",
+    "load": {
+        "base_path": "~/data/${dataset}",
+        "train_path": "${load.base_path}/train",
+        "dev_path": "${load.base_path}/dev",
+        "test_path": "${load.base_path}/test",
+    },
+    "network": {
+        "num_hidden_layers": 3,
+        "num_attention_heads": 8,
+    },
+    "store": "checkpoints/${dataset}/${network.num_hidden_layers}L${network.num_attention_heads}H/",
+}
+
+parsed = smartdict.parse(data)
+
+print(parsed["load"]["base_path"])
+# ~/data/spotify
+
+print(parsed["load"]["dev_path"])
+# ~/data/spotify/dev
+
+print(parsed["store"])
+# checkpoints/spotify/3L8H/</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Scenarios</p>
+        <h2>Common ways people use SmartDict</h2>
+      </div>
+      <div class="grid scenario-grid">
+        <article class="card">
+          <h3>ML experiment configs</h3>
+          <p>
+            Reuse dataset names, checkpoint paths, and model fallback chains without
+            scattering string formatting through training code.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Service runtime settings</h3>
+          <p>
+            Parse ports, booleans, or JSON payloads with typed defaults such as
+            <code>${env.PORT:8000|int}</code>.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Structured metadata</h3>
+          <p>
+            Attach typed object defaults like
+            <code>${config:{"owner": "jyonn"}}</code> without post-processing.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Hybrid object + dict configs</h3>
+          <p>
+            Resolve values from custom Python objects, plain dictionaries, lists,
+            and tuples within the same config tree.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built for GitHub Pages. Continue with <a href="./references.html">References</a>.</p>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartDict Handbook · Recipes</title>
+  <meta name="description" content="Scenario-driven SmartDict recipes for experiment configs, runtime settings, metadata, and hybrid object/dict configs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="recipes">
+  <header class="site-header">
+    <a class="site-brand" href="./index.html">
+      <span class="site-brand-mark">SD</span>
+      <span class="site-brand-copy">
+        <strong>SmartDict</strong>
+        <span>Handbook</span>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav">
+      <a href="./index.html" data-nav="home">Overview</a>
+      <a href="./references.html" data-nav="references">References</a>
+      <a href="./defaults-json.html" data-nav="defaults">Defaults & JSON</a>
+      <a href="./pipelines.html" data-nav="pipelines">Pipelines</a>
+      <a href="./modes-errors.html" data-nav="modes">Modes & Errors</a>
+      <a href="./recipes.html" data-nav="recipes">Recipes</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-hero">
+      <p class="eyebrow">Scenario Page</p>
+      <h1>Real-world SmartDict cases</h1>
+      <p class="page-hero-text">
+        These recipes show how SmartDict features combine in practice. Each case
+        is intentionally shaped like a real config someone would maintain.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Scenario 1</p>
+        <h2>ML experiment configuration</h2>
+      </div>
+      <div class="code-block">
+        <div class="code-block-head">
+          <span>python</span>
+          <button class="copy-button" data-copy-target="recipe-ml">Copy</button>
+        </div>
+        <pre><code id="recipe-ml">smartdict.parse({
+    "dataset": "spotify",
+    "load": {
+        "base_path": "~/data/${dataset}",
+        "dev_path": "${load.base_path}/dev",
+    },
+    "network": {
+        "num_hidden_layers": 3,
+        "num_attention_heads": 8,
+    },
+    "store": "checkpoints/${dataset}/${network.num_hidden_layers}L${network.num_attention_heads}H/",
+})</code></pre>
+      </div>
+      <p class="section-lead">
+        This pattern is the bread-and-butter SmartDict use case: nested references
+        remove repeated path construction and reduce config duplication.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Scenario 2</p>
+        <h2>Embedding model fallback chain</h2>
+      </div>
+      <div class="code-block compact">
+        <pre><code>smartdict.parse({
+    "repr_source_model": "text-embedding-3-small",
+    "embedding_model": "${sid_embedding_model:${repr_source_model:null}}",
+})
+# {'repr_source_model': 'text-embedding-3-small', 'embedding_model': 'text-embedding-3-small'}</code></pre>
+      </div>
+      <p class="section-lead">
+        This is useful when a more specific field should override a broad default,
+        but the config should still remain typed if everything is missing.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Scenario 3</p>
+        <h2>Typed runtime settings</h2>
+      </div>
+      <div class="code-block compact">
+        <pre><code>smartdict.parse({
+    "debug": "${env.DEBUG:false|bool}",
+    "port": "${env.PORT:8000|int}",
+    "save_dir": '${dataset:"My Dataset"|strip|lower|slug}',
+})</code></pre>
+      </div>
+      <p class="section-lead">
+        Pipelines make config values usable immediately, instead of forcing the
+        application to perform ad hoc type conversion everywhere.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Scenario 4</p>
+        <h2>JSON metadata fallback</h2>
+      </div>
+      <div class="code-block compact">
+        <pre><code>smartdict.parse({
+    "metadata": '${config:{"hello": "world", "owner": "jyonn"}}',
+})</code></pre>
+      </div>
+      <p class="section-lead">
+        Use JSON defaults when you want nested objects or arrays without manually
+        decoding strings after parsing.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="section-kicker">Scenario 5</p>
+        <h2>Object-backed profile switching</h2>
+      </div>
+      <div class="code-block compact">
+        <pre><code>class Config:
+    def __init__(self):
+        self.profile = "prod"
+
+smartdict.parse({
+    "app": Config(),
+    "services": {
+        "prod": {"url": "https://example.com"},
+        "dev": {"url": "http://localhost:8000"},
+    },
+    "selected_url": "${services.${app.profile}.url}",
+})</code></pre>
+      </div>
+      <p class="section-lead">
+        This pattern is handy when runtime state is represented by a small object
+        but environment details still live in plain configuration dictionaries.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Return to the <a href="./index.html">overview</a> or revisit <a href="./pipelines.html">Pipelines</a>.</p>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>
