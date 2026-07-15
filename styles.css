@@ -678,15 +678,15 @@ pre code {
 
 .editor-highlight {
   pointer-events: none;
-  width: max-content;
-  min-width: 100%;
+  width: 100%;
+  min-width: 0;
 }
 
 .editor-input {
   position: absolute;
   inset: 0;
-  width: max-content;
-  min-width: 100%;
+  width: 100%;
+  min-width: 0;
   border: 0;
   resize: none;
   background: transparent;
