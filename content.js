@@ -554,13 +554,21 @@ class Config:
               },
               {
                 title: l("迭代模式", "迭代模式", "Iterative mode", "Mode itératif", "iterative モード", "iterative 모드", "Modo iterative"),
-                summary: l("第一轮先生成 key，第二轮后续引用才会真正看到它。把 iterations 改成 1 和 2 对比一下最直观。", "第一輪先生成 key，第二輪後續引用才會真正看到它。把 iterations 改成 1 和 2 對比一下最直觀。", "The first pass creates the key, and only the second pass lets downstream references see it. Switching between iterations 1 and 2 makes the behavior obvious.", "Le premier passage crée la clé, et seul le second permet aux références aval de la voir. Passez de 1 à 2 itérations pour voir la différence.", "1回目で key が生成され、2回目で後続参照がそれを見られるようになります。iterations を 1 と 2 で比べると分かりやすいです。", "첫 번째 패스에서 key가 생성되고, 두 번째 패스에서야 뒤쪽 참조가 그것을 볼 수 있습니다. iterations를 1과 2로 바꿔 보면 가장 직관적입니다.", "La primera pasada crea la clave y solo la segunda permite que las referencias posteriores la vean. Cambiar entre iteraciones 1 y 2 lo hace muy evidente."),
+                summary: l("这个例子会一轮轮生成新的 key，直到第 10 次迭代 result 才会真正变成 done。把 iterations 改成 9 和 10 对比最直观。", "這個例子會一輪輪生成新的 key，直到第 10 次迭代 result 才會真正變成 done。把 iterations 改成 9 和 10 對比最直觀。", "This example generates a new key on each pass, and result only becomes done on iteration 10. Comparing iterations 9 and 10 makes the behavior obvious.", "Cet exemple génère une nouvelle clé à chaque passage, et result ne devient done qu'à la 10e itération. Comparez 9 et 10 itérations pour voir la différence.", "この例では各パスで新しい key が生成され、10回目の反復で初めて result が done になります。iterations を 9 と 10 で比べると分かりやすいです。", "이 예제는 패스마다 새로운 key를 생성하고, 10번째 반복에서야 result가 done이 됩니다. iterations를 9와 10으로 바꿔 보면 가장 직관적입니다.", "Este ejemplo genera una clave nueva en cada pasada y result solo se convierte en done en la iteración 10. Comparar 9 y 10 iteraciones lo hace muy evidente."),
                 mode: "iterative",
-                iterations: 2,
+                iterations: 10,
                 source: `{
-  x: "y",
-  "\${x}": 123,
-  a: "\${y}"
+  k1: "k2",
+  "\${k1}": "k3",
+  "\${k2}": "k4",
+  "\${k3}": "k5",
+  "\${k4}": "k6",
+  "\${k5}": "k7",
+  "\${k6}": "k8",
+  "\${k7}": "k9",
+  "\${k8}": "k10",
+  "\${k9}": "done",
+  result: "\${k10}"
 }`,
               },
               {
